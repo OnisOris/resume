@@ -28,7 +28,14 @@ class Settings(BaseSettings):
     @property
     def resolved_database_url(self) -> str:
         if self.database_url:
-            return self.database_url
+            raw = str(self.database_url)
+            # если схема не указана, трактуем как путь до sqlite-файла
+            if "://" not in raw:
+                path = Path(raw)
+                if not path.is_absolute():
+                    path = self.data_dir / path
+                return f"sqlite:///{path}"
+            return raw
         self.data_dir.mkdir(parents=True, exist_ok=True)
         return f"sqlite:///{self.data_dir / 'app.db'}"
 
