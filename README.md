@@ -38,6 +38,7 @@ docker compose up -d --build
 - `APP_HOST`, `APP_PORT` — сетевые параметры (по умолчанию `0.0.0.0:8000`).
 - `APP_DATABASE_URL` — путь к БД (по умолчанию SQLite `data/app.db`).
 - `APP_DATA_DIR` — путь к каталогу с данными/фото/резюме.
+- `APP_TRUSTED_HOSTS` — `*` или список через запятую для доверенных прокси (для `X-Forwarded-*`).
 
 ## Структура
 - `src/app/__main__.py` — точка входа (`uv run start`).

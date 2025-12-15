@@ -21,10 +21,7 @@ class Settings(BaseSettings):
         default=Path(__file__).resolve().parents[2] / "data",
         description="Директория с пользовательскими данными и медиа.",
     )
-    trusted_hosts: List[str] = Field(
-        default_factory=lambda: ["*"],
-        description="Доверенные хосты для разбора X-Forwarded-* заголовков.",
-    )
+    trusted_hosts: str | List[str] = Field(default="*", description="Доверенные хосты или список через запятую.")
     cors_origins: List[str] = Field(default_factory=lambda: ["*"])
     model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_", extra="ignore")
 
