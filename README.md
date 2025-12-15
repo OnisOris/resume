@@ -25,6 +25,14 @@ docker build -t resume .
 docker run --rm -p 8000:8000 --env-file .env -v "$PWD/data:/app/data" resume
 ```
 
+### Docker Compose
+1) Создайте `.env` (можно начать с `.env.example`): укажите `APP_ADMIN_TOKEN`, при желании поменяйте `DATA_DIR` на путь на хосте.  
+2) Запуск/обновление:  
+```bash
+docker compose up -d --build
+```
+Сервис поднимется на `${APP_PORT:-8000}`, данные/БД лежат в `${DATA_DIR:-./data}` на хосте.
+
 Настройки через переменные окружения (файл `.env`):
 - `APP_ADMIN_TOKEN` — обязателен для админских запросов (заголовок `X-Admin-Token`).
 - `APP_HOST`, `APP_PORT` — сетевые параметры (по умолчанию `0.0.0.0:8000`).

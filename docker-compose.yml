@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  resume:
+    build: .
+    image: resume:latest
+    container_name: resume
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_ADMIN_TOKEN: ${APP_ADMIN_TOKEN:?set APP_ADMIN_TOKEN in .env}
+      APP_TRUSTED_HOSTS: ${APP_TRUSTED_HOSTS:-*}
+      APP_HOST: ${APP_HOST:-0.0.0.0}
+      APP_PORT: ${APP_PORT:-8000}
+      APP_DATABASE_URL: ${APP_DATABASE_URL:-}
+      APP_DATA_DIR: ${APP_DATA_DIR:-/app/data}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    volumes:
+      - ${DATA_DIR:-./data}:/app/data
