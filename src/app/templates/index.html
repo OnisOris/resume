@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block content %}
+{% set person = resume.get("person", {}) %}
+{% set contacts = resume.get("contacts", {}) %}
+{% set photo_path = person.get("photo") %}
+{% set photo_url = url_for('data', path=photo_path) if photo_path else None %}
+<main class="page">
+  <section class="hero" id="about">
+    <div class="hero-text">
+      <p class="eyebrow">Открыт к проектам</p>
+      <h1>{{ person.get("name", "Без имени") }}</h1>
+      <div class="title-line">
+        <span class="pill">{{ person.get("title", "") }}</span>
+        <span class="muted">{{ person.get("location", "") }}</span>
+      </div>
+      <p class="summary">{{ resume.get("summary", "") }}</p>
+      <div class="cta">
+        {% if contacts.get("phone") %}
+        <a class="button" href="tel:{{ contacts.get('phone') }}">Позвонить</a>
+        {% endif %}
+        {% if contacts.get("email") %}
+        <a class="button ghost" href="mailto:{{ contacts.get('email') }}">Написать</a>
+        {% endif %}
+        {% if contacts.get("github") %}
+        <a class="chip" href="{{ contacts.get('github') }}" target="_blank">GitHub</a>
+        {% endif %}
+      </div>
+      <div class="lang">
+        {% for lang in contacts.get("languages", []) %}
+        <span class="lang-chip">{{ lang.name }} — {{ lang.level }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="hero-card">
+      {% if photo_url %}
+      <div class="photo" style="background-image: url('{{ photo_url }}');"></div>
+      {% endif %}
+      <div class="kv">
+        <div>
+          <div class="kv-label">Телефон</div>
+          <div class="kv-value">{{ contacts.get("phone") }}</div>
+        </div>
+        <div>
+          <div class="kv-label">Email</div>
+          <div class="kv-value">{{ contacts.get("email") }}</div>
+        </div>
+      </div>
+      <div class="kv">
+        <div>
+          <div class="kv-label">GitHub</div>
+          <div class="kv-value">{{ contacts.get("github") }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="section">
+    <div class="section-header">
+      <h2>Навыки и инструменты</h2>
+      <p class="muted">Быстрая ориентация в технологии — от бэкенда до микроэлектроники.</p>
+    </div>
+    <div class="cards-grid three">
+      {% for label, values in resume.get("skills", {}).items() %}
+      <div class="card">
+        <div class="card-title">{{ label }}</div>
+        <div class="tagline">
+          {% for value in values %}
+          <span class="chip">{{ value }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="section-header">
+      <h2>Проекты</h2>
+      <p class="muted">Подборка задач, которые двигают меня вперёд.</p>
+    </div>
+    <div class="cards-grid three">
+      {% for project in resume.get("projects", []) %}
+      <div class="card">
+        <div class="card-title">{{ project.name }}</div>
+        <p class="muted">{{ project.summary }}</p>
+        <div class="tagline">
+          {% for tag in project.stack %}
+          <span class="chip">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="experience" class="section">
+    <div class="section-header">
+      <h2>Опыт</h2>
+      <p class="muted">От управления БАС до автоматизации процессов.</p>
+    </div>
+    <div class="timeline">
+      {% for job in resume.get("experience", []) %}
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-meta">{{ job.period }} • {{ job.location }}</div>
+          <div class="timeline-title">{{ job.role }} — {{ job.company }}</div>
+          <p class="muted">{{ job.focus }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="education" class="section">
+    <div class="section-header">
+      <h2>Образование</h2>
+    </div>
+    <div class="timeline">
+      {% for edu in resume.get("education", []) %}
+      <div class="timeline-item">
+        <div class="timeline-dot small"></div>
+        <div>
+          <div class="timeline-meta">{{ edu.period }}</div>
+          <div class="timeline-title">{{ edu.program }}</div>
+          <p class="muted">{{ edu.place }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="achievements" class="section">
+    <div class="section-header">
+      <h2>Достижения</h2>
+    </div>
+    <div class="cards-grid three">
+      {% for ach in resume.get("achievements", []) %}
+      <div class="card highlight">
+        <div class="card-title">{{ ach.title }}</div>
+        <p class="muted">{{ ach.detail }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="wishlist" class="section">
+    <div class="section-header">
+      <h2>Вишлист и бронь подарков</h2>
+      <p class="muted">Выберите подарок, оставьте имя и контакт — бронирование обновится сразу. Есть отдельная страница с удобной админкой.</p>
+      <a class="chip" href="/wishlist">Открыть отдельную вкладку</a>
+    </div>
+    <div id="wishlist-grid" class="cards-grid two"></div>
+  </section>
+
+  <section id="posts" class="section">
+    <div class="section-header">
+      <h2>Посты и заметки</h2>
+      <p class="muted">Небольшие обновления, идеи и контекст к проектам.</p>
+    </div>
+    <div id="posts-grid" class="cards-grid two posts-grid"></div>
+  </section>
+
+  <section id="admin" class="section admin">
+    <div class="section-header">
+      <h2>Админка</h2>
+      <p class="muted">Хранится локально, работает через X-Admin-Token.</p>
+    </div>
+    <div class="admin-grid">
+      <div class="card">
+        <div class="card-title">Токен</div>
+        <p class="muted">Сохраните токен (APP_ADMIN_TOKEN) — он остаётся в LocalStorage.</p>
+        <input id="admin-token" type="password" placeholder="введите токен">
+        <button id="save-token" class="button full">Сохранить токен</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Новый пункт вишлиста</div>
+        <form id="wish-form">
+          <input name="title" placeholder="Заголовок" required>
+          <input name="price" placeholder="Цена или ориентир">
+          <input name="link" placeholder="Ссылка">
+          <textarea name="description" placeholder="Описание"></textarea>
+          <button class="button full" type="submit">Создать</button>
+        </form>
+      </div>
+      <div class="card">
+        <div class="card-title">Новый пост</div>
+        <form id="post-form">
+          <input name="title" placeholder="Заголовок" required>
+          <input name="summary" placeholder="Кратко" required>
+          <textarea name="body" placeholder="Текст" required></textarea>
+          <input name="tags" placeholder="Теги через запятую">
+          <button class="button full" type="submit">Опубликовать</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script id="initial-state" type="application/json">{{ initial_json | safe }}</script>
+</main>
+{% endblock %}

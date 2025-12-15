@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+{% set person = resume.get("person", {}) %}
+<main class="page">
+  <section class="hero split" id="wishlist-hero">
+    <div class="hero-text">
+      <p class="eyebrow">Подарки и идеи</p>
+      <h1>Вишлист {{ person.get("name") }}</h1>
+      <p class="summary">Здесь можно забронировать подарок. Добавлять и редактировать позиции могу только я через админ-блок с токеном.</p>
+      <div class="cta">
+        <a class="button" href="#wishlist-grid-page">Смотреть список</a>
+        <a class="button ghost" href="#wishlist-admin">Админ-панель</a>
+      </div>
+    </div>
+    <div class="hero-card compact">
+      <div class="kv">
+        <div>
+          <div class="kv-label">Город</div>
+          <div class="kv-value">{{ person.get("location") }}</div>
+        </div>
+        <div>
+          <div class="kv-label">Собираю</div>
+          <div class="kv-value">технику, гаджеты, впечатления</div>
+        </div>
+      </div>
+      <p class="muted small">Бронь простая: имя + контакт, без регистрации. Вижу бронь сразу, могу снять или обновить через токен.</p>
+    </div>
+  </section>
+
+  <section class="section" id="wishlist-grid-page">
+    <div class="section-header wishlist-controls">
+      <div>
+        <h2>Список подарков</h2>
+        <p class="muted">Выберите подарок и нажмите «Забронировать». Контакт нужен, чтобы связаться.</p>
+      </div>
+      <div class="filter-row">
+        <button class="chip filter-chip" data-filter="all">Все</button>
+        <button class="chip filter-chip" data-filter="free">Свободные</button>
+        <button class="chip filter-chip" data-filter="reserved">Забронированные</button>
+      </div>
+    </div>
+    <div id="wishlist-page-grid" class="cards-grid two wishlist-grid"></div>
+  </section>
+
+  <section class="section admin" id="wishlist-admin">
+    <div class="section-header">
+      <h2>Админ-панель</h2>
+      <p class="muted">Только с токеном. Добавление с фото и быстрые правки карточек.</p>
+    </div>
+    <div class="admin-grid">
+      <div class="card">
+        <div class="card-title">Токен</div>
+        <p class="muted small">Заголовок X-Admin-Token хранится локально (LocalStorage).</p>
+        <input id="admin-token" type="password" placeholder="введите токен">
+        <button id="save-token" class="button full">Сохранить</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Добавить подарок</div>
+        <form id="wish-create-form" enctype="multipart/form-data">
+          <input name="title" placeholder="Заголовок" required>
+          <input name="price" placeholder="Цена или ориентир">
+          <input name="link" placeholder="Ссылка на товар/листинг">
+          <textarea name="description" placeholder="Коротко о подарке"></textarea>
+          <label class="upload">
+            <span>Фото (jpg/png)</span>
+            <input name="image" type="file" accept="image/*">
+          </label>
+          <button class="button full" type="submit">Создать</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script id="initial-state" type="application/json">{{ initial_json | safe }}</script>
+</main>
+{% endblock %}

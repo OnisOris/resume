@@ -1,0 +1,38 @@
+[project]
+name = "resume"
+version = "0.1.0"
+description = "Personal resume site with wishlist and admin tools"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.112.0",
+    "uvicorn[standard]>=0.30.0",
+    "sqlmodel>=0.0.19",
+    "pydantic-settings>=2.3.0",
+    "pyyaml>=6.0.0",
+    "jinja2>=3.1.0",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.6.0"]
+
+[build-system]
+requires = ["setuptools>=68.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+start = "app.__main__:main"
+dev = "app.__main__:dev"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+src = ["src"]

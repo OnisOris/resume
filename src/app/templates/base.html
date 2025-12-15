@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>{{ settings.site_name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body data-page="{{ page_name or 'home' }}">
+  <div class="grain"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="dot"></div>
+      <div>
+        <div class="brand-title">{{ settings.site_name }}</div>
+        <div class="brand-sub">{{ settings.site_tagline }}</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="/">Резюме</a>
+      <a href="/wishlist">Вишлист</a>
+      {% if (page_name or 'home') == 'home' %}
+        <a href="#skills">Навыки</a>
+        <a href="#experience">Опыт</a>
+        <a href="#posts">Посты</a>
+        <a href="#admin">Админ</a>
+      {% else %}
+        <a href="#wishlist-grid-page">Список</a>
+        <a href="#wishlist-admin">Админ</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <script src="{{ url_for('static', path='app.js') }}" defer></script>
+</body>
+</html>
