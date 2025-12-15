@@ -23,6 +23,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select
 from fastapi.encoders import jsonable_encoder
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from .config import Settings, get_settings
 from .database import create_db_and_tables, ensure_wishlist_columns, init_engine
@@ -81,6 +82,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ensure_wishlist_columns()
 
     app = FastAPI(title=settings.site_name, description=settings.site_tagline)
+    app.add_middleware(
+        ProxyHeadersMiddleware,
+        trusted_hosts=settings.trusted_hosts,
+    )
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,

@@ -3,7 +3,7 @@
 {% set person = resume.get("person", {}) %}
 {% set contacts = resume.get("contacts", {}) %}
 {% set photo_path = person.get("photo") %}
-{% set photo_url = url_for('data', path=photo_path) if photo_path else None %}
+{% set photo_url = request.url_for('data', path=photo_path).path if photo_path else None %}
 <main class="page">
   <section class="hero" id="about">
     <div class="hero-text">
