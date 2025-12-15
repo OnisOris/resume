@@ -26,6 +26,14 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_", extra="ignore")
 
     @property
+    def resolved_data_dir(self) -> Path:
+        base = Path(self.data_dir)
+        if not base.is_absolute():
+            base = (Path(__file__).resolve().parents[2] / base).resolve()
+        base.mkdir(parents=True, exist_ok=True)
+        return base
+
+    @property
     def resolved_database_url(self) -> str:
         if self.database_url:
             raw = str(self.database_url)
@@ -33,11 +41,11 @@ class Settings(BaseSettings):
             if "://" not in raw:
                 path = Path(raw)
                 if not path.is_absolute():
-                    path = self.data_dir / path
+                    path = self.resolved_data_dir / path
                 return f"sqlite:///{path}"
             return raw
-        self.data_dir.mkdir(parents=True, exist_ok=True)
-        return f"sqlite:///{self.data_dir / 'app.db'}"
+        base = self.resolved_data_dir
+        return f"sqlite:///{base / 'app.db'}"
 
 
 _settings: Settings | None = None

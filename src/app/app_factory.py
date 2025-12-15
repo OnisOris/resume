@@ -95,8 +95,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
 
     static_dir = Path(__file__).parent / "static"
-    data_dir = settings.data_dir
-    data_dir.mkdir(parents=True, exist_ok=True)
+    data_dir = settings.resolved_data_dir
 
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
     app.mount("/data", StaticFiles(directory=str(data_dir)), name="data")
